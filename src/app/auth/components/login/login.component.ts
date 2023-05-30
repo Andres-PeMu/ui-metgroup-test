@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth/auth.service';
@@ -9,7 +9,7 @@ import { login } from 'src/app/core/models/auth.model';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   form!: FormGroup;
 
   constructor(
@@ -20,9 +20,15 @@ export class LoginComponent {
     this.buildForm();
   }
 
+  ngOnInit(): void {
+    if (this.authService.isAuthenticated()) {
+      this.router.navigate(['/']);
+    }
+  }
+
   login(event: Event) {
     event.preventDefault();
-    if(this.form.valid){
+    if (this.form.valid) {
       const dataLogin: login = this.form.value;
       this.authService.login(dataLogin).subscribe(resDataLogin => {
         this.authService.setToken(resDataLogin.token);

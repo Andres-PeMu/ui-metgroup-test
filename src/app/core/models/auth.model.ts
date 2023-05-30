@@ -14,7 +14,7 @@ export interface responseLogin {
   token: string;
 }
 
-export interface register {
+export interface registerUser {
   userName: string;
   password: string;
 }

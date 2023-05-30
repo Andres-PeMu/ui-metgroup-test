@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { registerUser } from 'src/app/core/models/auth.model';
+import { UserService } from 'src/app/core/services/auth/user.service';
 
 @Component({
   selector: 'app-register',
@@ -13,7 +15,7 @@ export class RegisterComponent {
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    // private authService: AuthService,
+    private userService: UserService,
   ) {
     this.buildForm();
   }
@@ -21,18 +23,14 @@ export class RegisterComponent {
   ngOnInit() {
   }
 
-  login(event: Event) {
+  register(event: Event) {
     event.preventDefault();
-    // if(this.form.valid){
-    //   const value = this.form.value;
-    //   this.authService.login(value.email, value.password)
-    //   .then(()=>{
-    //     this.router.navigate(['/admin'])
-    //   })
-    //   .catch(()=> {
-    //     alert('no es valido')
-    //    });
-    // }
+    if (this.form.valid) {
+      const dataRegister: registerUser = this.form.value;
+      this.userService.createUser(dataRegister).subscribe(() => {
+        this.router.navigate(['/auth/login']);
+      })
+    }
   }
 
   private buildForm() {
