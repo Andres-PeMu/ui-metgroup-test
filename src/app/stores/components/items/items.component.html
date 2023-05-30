@@ -1,0 +1,41 @@
+<table mat-table [dataSource]="items">
+
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef>Nombre</th>
+    <td mat-cell *matCellDef="let item">{{ item.name }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="price">
+    <th mat-header-cell *matHeaderCellDef>Precio</th>
+    <td mat-cell *matCellDef="let item">{{ item.price }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef>Acciones</th>
+    <td mat-cell *matCellDef="let item">
+      <button mat-icon-button color="primary" (click)="seeEditItem(item)">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-icon-button color="warn" (click)="deleteItem(item.name)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+<form (ngSubmit)="createItem()" [formGroup]="createForm">
+    <mat-form-field>
+      <input *ngIf="editItemForm" matInput placeholder="Nombre" formControlName="name" required readonly>
+      <input *ngIf="!editItemForm" matInput placeholder="Nombre" formControlName="name" required>
+    </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Precio" formControlName="price" required>
+  </mat-form-field>
+  <button *ngIf="!editItemForm" mat-raised-button color="primary" type="submit"
+    [disabled]="createForm.invalid">Crear</button>
+  <button *ngIf="editItemForm" mat-raised-button color="primary" (click)="editItem()" type="text">Editar</button>
+  <button *ngIf="editItemForm" mat-raised-button color="warn" (click)="closeEditItem()" type="text">Cancelar</button>
+</form>
