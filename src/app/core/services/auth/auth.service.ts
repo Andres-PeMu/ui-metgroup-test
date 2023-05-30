@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { login, responseLogin, user } from '../../models/auth.model';
+import { login, responseLogin } from '../../models/auth.model';
+import { environment } from './../../../../environments/environments';
 
 
 @Injectable({
@@ -10,15 +11,19 @@ export class AuthService {
 
   private TOKEN_KEY: string = 'miToken';
   private USER_KEY: string = 'user';
-  private apiUrl = `http://localhost:3001/api/v1/auth/login/`;
   isLoggedIn = false;
 
   constructor(
     private http: HttpClient,
-  ) { }
+  ) {
+    const token = this.getToken();
+    if (token) {
+      this.isLoggedIn = true;
+    }
+  }
 
   login(data: login) {
-    return this.http.post<responseLogin>(this.apiUrl, data);
+    return this.http.post<responseLogin>(`${environment.url_api}/auth/login/`, data);
   }
 
   logout() {
@@ -49,7 +54,7 @@ export class AuthService {
     localStorage.removeItem(this.USER_KEY);
   }
 
-  isAuthenticated(){
+  isAuthenticated() {
     return this.isLoggedIn
   }
 
