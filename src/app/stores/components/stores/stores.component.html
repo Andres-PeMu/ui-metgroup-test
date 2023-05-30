@@ -1,0 +1,38 @@
+<div class="store-list">
+  <h2>Lista de tiendas</h2>
+
+  <div class="store-form" *ngIf="!editStoreClic">
+    <form [formGroup]="storeForm">
+      <input type="text" formControlName="name" placeholder="Nombre de la tienda">
+      <button type="button" (click)="createStore()">Crear tienda</button>
+    </form>
+  </div>
+
+  <div class="store-cards">
+    <div class="store-card" *ngFor="let store of stores">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>{{ store.name }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>ID: {{ store.id }}</p>
+          <p>Fecha de creación: {{ store.createdAt }}</p>
+        </mat-card-content>
+        <mat-card-actions>
+          <div class="store-form" *ngIf="editStoreClic">
+            <form [formGroup]="storeForm">
+              <input type="text" formControlName="name" placeholder="Nombre de la tienda">
+              <button mat-button color="primary" (click)="editStore(store)">Editar</button>
+              <button mat-button color="warn" (click)="editStoreForms()">cancelar</button>
+            </form>
+          </div>
+          <button *ngIf="!editStoreClic" mat-button color="" (click)="seeItems(store.items, store.id)">ver</button>
+          <button *ngIf="!editStoreClic" mat-button color="primary" (click)="editStoreForms()">Editar</button>
+          <button *ngIf="!editStoreClic" mat-button color="warn" (click)="deleteStore(store.name)">Eliminar</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+</div>
+<button *ngIf="viewOrHideItems" (click)="hideItems()" mat-button color="warn">cerrar</button>
+<app-items *ngIf="viewOrHideItems" (loadStoreData)="seeItemsChildren($event)" [items]="items" [Storeid]="storeId"></app-items>
